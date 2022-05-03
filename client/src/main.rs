@@ -1,3 +1,5 @@
+mod lemain;
+
 fn main() {
-    println!("Hello, client!");
+    lemain::entry_point();
 }

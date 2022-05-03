@@ -13,8 +13,8 @@ mod te {
     use crate::two_plus_two;
 
     #[test]
-    fn test_somewthing(){
+    fn test_somewthing() {
         let res = two_plus_two(24);
-        assert_eq!(res , 56);
+        assert_eq!(res, 56);
     }
 }

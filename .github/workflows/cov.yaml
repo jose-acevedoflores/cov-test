@@ -1,0 +1,32 @@
+name: Coverage
+
+on: [push]
+jobs:
+ test-coverage-source-based:
+   runs-on: windows-latest
+   steps:
+     - uses: actions-rs/cargo@v1
+       with:
+         command: install
+         args: grcov
+     - run: rustup component add llvm-tools-preview
+     - uses: actions/checkout@v2
+     - uses: actions-rs/cargo@v1
+       with:
+         command: clean
+     - uses: actions-rs/cargo@v1
+       with:
+         command: build
+       env:
+         RUSTFLAGS: '-Cinstrument-coverage'
+     - uses: actions-rs/cargo@v1
+       with:
+         command: test
+         args: --verbose -p client
+       env:
+         RUSTFLAGS: '-Cinstrument-coverage'
+         LLVM_PROFILE_FILE: 'wut-%p.profraw'
+#     - name: Generate Coverage report
+#       run: grcov . -s . --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o .\target\lcov.info
+#     - run: rustup override unset
+#         if: {{ always() }}
