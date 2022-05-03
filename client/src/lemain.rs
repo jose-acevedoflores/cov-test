@@ -9,6 +9,8 @@ fn internal(i: i32) -> String {
         format!("low end {i}")
     } else if i == 1010 {
         format!("exact end")
+    }  else if i == 888 {
+        format!("exact eights")
     } else {
         format!("above and beyond {i}")
     }

@@ -19,27 +19,60 @@ jobs:
          path: ./target/
          key: lock-${{ hashFiles('**/Cargo.lock') }}
      - uses: actions/checkout@v2
-#     - uses: actions-rs/cargo@v1
-#       name: Clean
-#       with:
-#         command: clean
      - uses: actions-rs/cargo@v1
-       name: Build
+       name: Clean
+       with:
+         command: clean
+     - uses: actions-rs/cargo@v1
+       name: client - Build
        with:
          command: build
          args: -p client
        env:
          RUSTFLAGS: '-Cinstrument-coverage'
      - uses: actions-rs/cargo@v1
-       name: Test
+       name: client - Test
        with:
          command: test
          args: --verbose -p client
        env:
          RUSTFLAGS: '-Cinstrument-coverage'
          LLVM_PROFILE_FILE: 'wut-%p.profraw'
-#     - name: Generate Coverage report
-#       run: ./bin-cache/bin/grcov
+     - name: client - Generate Coverage report
+       run: ./bin-cache/bin/grcov .\client\ -s .\client\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/client.lcov.info
 #       run: grcov . -s . --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o .\target\lcov.info
 #     - run: rustup override unset
 #         if: {{ always() }}
+     - name: client - Coveralls
+       uses: coverallsapp/github-action@master
+       with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         path-to-lcov: ./target/client.lcov.info
+         base-path: ./client/
+
+     - uses: actions-rs/cargo@v1
+       name: server - Build
+       with:
+         command: build
+         args: -p server
+       env:
+         RUSTFLAGS: '-Cinstrument-coverage'
+     - uses: actions-rs/cargo@v1
+       name: server - Test
+       with:
+         command: test
+         args: --verbose -p server
+       env:
+         RUSTFLAGS: '-Cinstrument-coverage'
+         LLVM_PROFILE_FILE: 'wut-%p.profraw'
+     - name: server - Generate Coverage report
+       run: ./bin-cache/bin/grcov .\server\ -s .\server\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/server.lcov.info
+     #       run: grcov . -s . --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o .\target\lcov.info
+     #     - run: rustup override unset
+     #         if: {{ always() }}
+     - name: server - Coveralls
+       uses: coverallsapp/github-action@master
+       with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         path-to-lcov: ./target/server.lcov.info
+         base-path: ./server/
