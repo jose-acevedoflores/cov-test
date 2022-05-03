@@ -5,12 +5,11 @@ jobs:
  test-coverage-source-based:
    runs-on: windows-latest
    steps:
-     - uses: actions-rs/install@v0.1
-       name: Install grcov
-       with:
-         crate: grcov
-         version: latest
-         use-tool-cache: true
+#     - uses: actions-rs/cargo@v1
+#       name: Install grcov
+#       with:
+#         command: install
+#         args: grcov
      - run: rustup component add llvm-tools-preview
        name: Install llvm tools
      - name: Cache
@@ -39,7 +38,7 @@ jobs:
          RUSTFLAGS: '-Cinstrument-coverage'
          LLVM_PROFILE_FILE: 'wut-%p.profraw'
      - name: Generate Coverage report
-       run: grcov
+       run: ./bin-cache/bin/grcov
 #       run: grcov . -s . --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o .\target\lcov.info
 #     - run: rustup override unset
 #         if: {{ always() }}
