@@ -11,7 +11,13 @@ jobs:
          command: install
          args: grcov
      - run: rustup component add llvm-tools-preview
-       name: Install grcov
+       name: Install llvm tools
+     - name: Cache
+       id: rust-cache
+       uses: actions/cache@v3
+       with:
+         path: ./target/
+         key: lock-${{ hashFiles('**/Cargo.toml') }}
      - uses: actions/checkout@v2
      - uses: actions-rs/cargo@v1
        name: Clean
