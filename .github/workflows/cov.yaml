@@ -1,6 +1,6 @@
 name: Coverage
 
-on: [push]
+on: [push, pull_request]
 jobs:
  test-coverage-source-based:
    runs-on: windows-latest
@@ -17,16 +17,17 @@ jobs:
        uses: actions/cache@v3
        with:
          path: ./target/
-         key: lock-${{ hashFiles('**/Cargo.toml') }}
+         key: lock-${{ hashFiles('**/Cargo.lock') }}
      - uses: actions/checkout@v2
-     - uses: actions-rs/cargo@v1
-       name: Clean
-       with:
-         command: clean
+#     - uses: actions-rs/cargo@v1
+#       name: Clean
+#       with:
+#         command: clean
      - uses: actions-rs/cargo@v1
        name: Build
        with:
          command: build
+         args: -p client
        env:
          RUSTFLAGS: '-Cinstrument-coverage'
      - uses: actions-rs/cargo@v1
@@ -37,8 +38,8 @@ jobs:
        env:
          RUSTFLAGS: '-Cinstrument-coverage'
          LLVM_PROFILE_FILE: 'wut-%p.profraw'
-     - name: Generate Coverage report
-       run: ./bin-cache/bin/grcov
+#     - name: Generate Coverage report
+#       run: ./bin-cache/bin/grcov
 #       run: grcov . -s . --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o .\target\lcov.info
 #     - run: rustup override unset
 #         if: {{ always() }}
