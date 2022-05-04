@@ -14,11 +14,14 @@ pub enum Type {
 fn another(u: u32) -> Result<String, String> {
     if u == 0 {
         Err("bad".to_string())
-    } else {
+    } else if u == 23 {
         Ok("good".to_string())
+    } else {
+        Ok("unk".to_string())
     }
 }
 
+/// add some comments
 fn middleware(x: Type) {
 
     match x {
