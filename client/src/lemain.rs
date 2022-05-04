@@ -4,6 +4,8 @@ pub fn entry_point() {
     println!("result {res}");
     if res == "exact end" {
         println!("exacto");
+    } else if res == "exact eights" {
+        println!("8i88");
     }
 }
 
