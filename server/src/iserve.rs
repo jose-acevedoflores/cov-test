@@ -8,6 +8,7 @@ pub enum Type {
     Single,
     Multi,
     Extra,
+    Another,
 }
 
 fn middleware(x: Type) {
@@ -21,6 +22,9 @@ fn middleware(x: Type) {
         }
         Type::Extra => {
             panic!("dead jim");
+        }
+        Type::Another => {
+            unreachable!();
         }
     }
 }
