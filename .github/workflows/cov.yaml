@@ -44,27 +44,27 @@ jobs:
          LLVM_PROFILE_FILE: 'wut-%p.profraw'
      - name: client - Generate Coverage report
        run: ./bin-cache/bin/grcov .\client\ -s .\client\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/client.lcov.info
-#     - name: client - Coveralls
-#       uses: coverallsapp/github-action@master
-#       with:
-#         github-token: ${{ secrets.GITHUB_TOKEN }}
-#         path-to-lcov: ./target/client.lcov.info
-#         base-path: ./client/
+     - name: client - Coveralls
+       uses: coverallsapp/github-action@master
+       with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         path-to-lcov: ./target/client.lcov.info
+         base-path: ./client/
 
      - name: server - Generate Coverage report
        run: ./bin-cache/bin/grcov .\server\ -s .\server\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/server.lcov.info
-#     - name: server - Coveralls
-#       uses: coverallsapp/github-action@master
-#       with:
-#         github-token: ${{ secrets.GITHUB_TOKEN }}
-#         path-to-lcov: ./target/server.lcov.info
-#         base-path: ./server/
-
-     - uses: codecov/codecov-action@v2
+     - name: server - Coveralls
+       uses: coverallsapp/github-action@master
        with:
-         #token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-         files: ./target/server.lcov.info,./target/client.lcov.info # optional
-         #flags: unittests # optional
-         name: codecov-umbrella # optional
-         fail_ci_if_error: true # optional (default = false)
-         verbose: true # optional (default = false)
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         path-to-lcov: ./target/server.lcov.info
+         base-path: ./server/
+
+#     - uses: codecov/codecov-action@v2
+#       with:
+#         #token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+#         files: ./target/server.lcov.info,./target/client.lcov.info # optional
+#         #flags: unittests # optional
+#         name: codecov-umbrella # optional
+#         fail_ci_if_error: true # optional (default = false)
+#         verbose: true # optional (default = false)
