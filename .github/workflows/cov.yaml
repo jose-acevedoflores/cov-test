@@ -1,6 +1,6 @@
 name: Coverage
 
-on: [push, pull_request]
+on: [pull_request]
 jobs:
  test-coverage-source-based:
    runs-on: windows-latest
@@ -74,11 +74,11 @@ jobs:
          path-to-lcov: ./target/server.lcov.info
          base-path: ./server/
 
-     - uses: codecov/codecov-action@v2
-       with:
-#         token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-         files: ./target/server.lcov.info,./target/client.lcov.info # optional
-#         flags: unittests # optional
-         name: codecov-umbrella # optional
-         fail_ci_if_error: true # optional (default = false)
-         verbose: true # optional (default = false)
+#     - uses: codecov/codecov-action@v2
+#       with:
+#         #token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+#         files: ./target/server.lcov.info,./target/client.lcov.info # optional
+#         #flags: unittests # optional
+#         name: codecov-umbrella # optional
+#         fail_ci_if_error: true # optional (default = false)
+#         verbose: true # optional (default = false)
