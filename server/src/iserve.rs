@@ -40,14 +40,15 @@ fn middleware(x: Type) {
     }
 }
 
-pub fn single_change() {
+pub fn single_change() -> u32 {
     println!("executed");
     middleware(Type::Single);
+    8
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::iserve::{middleware, serve, Type};
+    use crate::iserve::{middleware, serve, single_change, Type};
 
     #[test]
     fn run_serve() {
@@ -64,5 +65,10 @@ mod tests {
     #[should_panic]
     fn run_internal2() {
         middleware(Type::Another(0));
+    }
+
+    #[test]
+    fn singf() {
+        assert_eq!(single_change(), 8);
     }
 }
