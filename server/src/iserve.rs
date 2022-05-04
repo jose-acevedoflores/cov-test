@@ -40,6 +40,11 @@ fn middleware(x: Type) {
     }
 }
 
+pub fn single_change() {
+    println!("executed");
+    middleware(Type::Single);
+}
+
 #[cfg(test)]
 mod tests {
     use crate::iserve::{middleware, serve, Type};
