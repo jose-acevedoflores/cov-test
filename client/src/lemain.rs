@@ -2,6 +2,9 @@ pub fn entry_point() {
     println!("Hello, client! f");
     let res = internal(34);
     println!("result {res}");
+    if res == "exact end" {
+        println!("exacto");
+    }
 }
 
 fn internal(i: i32) -> String {
