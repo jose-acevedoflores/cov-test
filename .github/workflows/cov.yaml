@@ -28,25 +28,22 @@ jobs:
        with:
          command: clean
      - uses: actions-rs/cargo@v1
-       name: client - Build
+       name: Build
        with:
          command: build
-         args: -p client
+         args: -p client -p server
        env:
          RUSTFLAGS: '-Cinstrument-coverage'
      - uses: actions-rs/cargo@v1
-       name: client - Test
+       name: Test
        with:
          command: test
-         args: --verbose -p client
+         args: --verbose -p client -p server
        env:
          RUSTFLAGS: '-Cinstrument-coverage'
          LLVM_PROFILE_FILE: 'wut-%p.profraw'
      - name: client - Generate Coverage report
        run: ./bin-cache/bin/grcov .\client\ -s .\client\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/client.lcov.info
-#       run: grcov . -s . --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o .\target\lcov.info
-#     - run: rustup override unset
-#         if: {{ always() }}
 #     - name: client - Coveralls
 #       uses: coverallsapp/github-action@master
 #       with:
@@ -54,21 +51,6 @@ jobs:
 #         path-to-lcov: ./target/client.lcov.info
 #         base-path: ./client/
 
-     - uses: actions-rs/cargo@v1
-       name: server - Build
-       with:
-         command: build
-         args: -p server
-       env:
-         RUSTFLAGS: '-Cinstrument-coverage'
-     - uses: actions-rs/cargo@v1
-       name: server - Test
-       with:
-         command: test
-         args: --verbose -p server
-       env:
-         RUSTFLAGS: '-Cinstrument-coverage'
-         LLVM_PROFILE_FILE: 'wut-%p.profraw'
      - name: server - Generate Coverage report
        run: ./bin-cache/bin/grcov .\server\ -s .\server\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/server.lcov.info
 #     - name: server - Coveralls
