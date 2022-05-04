@@ -8,7 +8,15 @@ pub enum Type {
     Single,
     Multi,
     Extra,
-    Another,
+    Another(u32),
+}
+
+fn another(u: u32) -> Result<String, String> {
+    if u == 0 {
+        Err("bad".to_string())
+    } else {
+        Ok("good".to_string())
+    }
 }
 
 fn middleware(x: Type) {
@@ -23,8 +31,8 @@ fn middleware(x: Type) {
         Type::Extra => {
             panic!("dead jim");
         }
-        Type::Another => {
-            unreachable!();
+        Type::Another(u) => {
+            another(u).unwrap();
         }
     }
 }
@@ -47,6 +55,6 @@ mod tests {
     #[test]
     #[should_panic]
     fn run_internal2() {
-        middleware(Type::Another);
+        middleware(Type::Another(0));
     }
 }
