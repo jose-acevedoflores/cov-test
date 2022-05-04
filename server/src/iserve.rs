@@ -43,4 +43,10 @@ mod tests {
     fn run_internal() {
         middleware(Type::Extra);
     }
+
+    #[test]
+    #[should_panic]
+    fn run_internal2() {
+        middleware(Type::Another);
+    }
 }
