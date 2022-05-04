@@ -15,7 +15,7 @@ fn another(u: u32) -> Result<String, String> {
     if u == 0 {
         Err("bad".to_string())
     } else if u == 23 {
-        Ok("good".to_string())
+        Ok("goods".to_string())
     } else {
         Ok("unk".to_string())
     }
