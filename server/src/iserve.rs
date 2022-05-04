@@ -21,6 +21,7 @@ fn another(u: u32) -> Result<String, String> {
     }
 }
 
+/// add some comments
 fn middleware(x: Type) {
 
     match x {
