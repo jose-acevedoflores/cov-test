@@ -21,6 +21,10 @@ fn another(u: u32) -> Result<String, String> {
     }
 }
 
+fn standalone() {
+    println!("all alone");
+}
+
 /// add some comments
 fn middleware(x: Type) {
 
