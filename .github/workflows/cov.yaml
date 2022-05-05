@@ -50,15 +50,17 @@ jobs:
          github-token: ${{ secrets.GITHUB_TOKEN }}
          path-to-lcov: ./target/client.lcov.info
          base-path: ./client/
+         flag-name: unit-client
 
      - name: server - Generate Coverage report
        run: ./bin-cache/bin/grcov .\server\ -s .\server\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/server.lcov.info
-#     - name: server - Coveralls
-#       uses: coverallsapp/github-action@master
-#       with:
-#         github-token: ${{ secrets.GITHUB_TOKEN }}
-#         path-to-lcov: ./target/server.lcov.info
-#         base-path: ./server/
+     - name: server - Coveralls
+       uses: coverallsapp/github-action@master
+       with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         path-to-lcov: ./target/server.lcov.info
+         base-path: ./server/
+         flag-name: unit-server
 
 #     - uses: codecov/codecov-action@v2
 #       with:
