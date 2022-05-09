@@ -70,3 +70,12 @@ jobs:
 #         name: codecov-umbrella # optional
 #         fail_ci_if_error: true # optional (default = false)
 #         verbose: true # optional (default = false)
+
+     - name: Archive code coverage results
+       uses: actions/upload-artifact@v3
+       with:
+         name: code-coverage-report
+         retention-days: 5
+         path: |
+            ./target/server.html
+            ./target/client.html
