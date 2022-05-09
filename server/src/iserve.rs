@@ -49,30 +49,30 @@ pub fn single_change() -> u32 {
     middleware(Type::Single);
     8
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::iserve::{middleware, serve, single_change, Type};
-
-    #[test]
-    fn run_serve() {
-        serve();
-    }
-
-    #[test]
-    #[should_panic(expected = "dead jim")]
-    fn run_internal() {
-        middleware(Type::Extra);
-    }
-
-    #[test]
-    #[should_panic]
-    fn run_internal2() {
-        middleware(Type::Another(0));
-    }
-
-    #[test]
-    fn singf() {
-        assert_eq!(single_change(), 8);
-    }
-}
+//
+// #[cfg(test)]
+// mod tests {
+//     use crate::iserve::{middleware, serve, single_change, Type};
+//
+//     #[test]
+//     fn run_serve() {
+//         serve();
+//     }
+//
+//     #[test]
+//     #[should_panic(expected = "dead jim")]
+//     fn run_internal() {
+//         middleware(Type::Extra);
+//     }
+//
+//     #[test]
+//     #[should_panic]
+//     fn run_internal2() {
+//         middleware(Type::Another(0));
+//     }
+//
+//     #[test]
+//     fn singf() {
+//         assert_eq!(single_change(), 8);
+//     }
+// }

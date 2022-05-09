@@ -21,18 +21,18 @@ fn internal(i: i32) -> String {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::lemain::{entry_point, internal};
-
-    #[test]
-    fn run_entry_point() {
-        entry_point()
-    }
-
-    #[test]
-    fn run_internal() {
-        let res = internal(214);
-        assert_eq!(res, "above and beyond 214");
-    }
-}
+// #[cfg(test)]
+// mod tests {
+//     use crate::lemain::{entry_point, internal};
+//
+//     #[test]
+//     fn run_entry_point() {
+//         entry_point()
+//     }
+//
+//     #[test]
+//     fn run_internal() {
+//         let res = internal(214);
+//         assert_eq!(res, "above and beyond 214");
+//     }
+// }
