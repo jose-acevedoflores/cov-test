@@ -25,7 +25,7 @@ fn standalone() {
     println!("all alone");
 }
 
-/// add some comments
+/// add some comments and more
 fn middleware(x: Type) {
 
     match x {
