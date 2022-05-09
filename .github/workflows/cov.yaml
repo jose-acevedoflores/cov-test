@@ -43,7 +43,7 @@ jobs:
          RUSTFLAGS: '-Cinstrument-coverage'
          LLVM_PROFILE_FILE: 'wut-%p.profraw'
      - name: client - Generate Coverage report
-       run: ./bin-cache/bin/grcov .\client\ -s .\client\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/client.lcov.info
+       run: ./bin-cache/bin/grcov .\client\ -s .\client\ --binary-path .\target\debug\ -t html --branch --ignore-not-existing -o ./target/client.html
 #     - name: client - Coveralls
 #       uses: coverallsapp/github-action@master
 #       with:
@@ -53,7 +53,7 @@ jobs:
 #         flag-name: unit-client
 
      - name: server - Generate Coverage report
-       run: ./bin-cache/bin/grcov .\server\ -s .\server\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/server.lcov.info
+       run: ./bin-cache/bin/grcov .\server\ -s .\server\ --binary-path .\target\debug\ -t html --branch --ignore-not-existing -o ./target/server.html
 #     - name: server - Coveralls
 #       uses: coverallsapp/github-action@master
 #       with:
