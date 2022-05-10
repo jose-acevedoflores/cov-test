@@ -7,6 +7,13 @@ on:
       - main
 jobs:
  test-coverage-source-based:
+   # this is needed , see https://github.com/actions/first-interaction/issues/10#issuecomment-1085820129
+   permissions:
+      issues: write
+      pull-requests: write
+      contents: write
+   env:
+     THRESHOLD: 90
    runs-on: windows-latest
    steps:
 #     - uses: actions-rs/cargo@v1
@@ -16,12 +23,12 @@ jobs:
 #         args: grcov
      - run: rustup component add llvm-tools-preview
        name: Install llvm tools
-#     - name: Cache
-#       id: rust-cache
-#       uses: actions/cache@v3
-#       with:
-#         path: ./target/
-#         key: lock-${{ hashFiles('**/Cargo.lock') }}
+     - name: Cache
+       id: rust-cache
+       uses: actions/cache@v3
+       with:
+         path: ./target/
+         key: lock-${{ hashFiles('**/Cargo.lock') }}
      - uses: actions/checkout@v2
      - uses: actions-rs/cargo@v1
        name: Clean
@@ -43,24 +50,25 @@ jobs:
          RUSTFLAGS: '-Cinstrument-coverage'
          LLVM_PROFILE_FILE: 'wut-%p.profraw'
      - name: client - Generate Coverage report
-       run: ./bin-cache/bin/grcov .\client\ -s .\client\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/client.lcov.info
-     - name: client - Coveralls
-       uses: coverallsapp/github-action@master
-       with:
-         github-token: ${{ secrets.GITHUB_TOKEN }}
-         path-to-lcov: ./target/client.lcov.info
-         base-path: ./client/
-         flag-name: unit-client
+       run: ./bin-cache/bin/grcov .\client\ -s .\client\ --binary-path .\target\debug\ -t html --branch --ignore-not-existing -o ./target/client.html
+
+#     - name: client - Coveralls
+#       uses: coverallsapp/github-action@master
+#       with:
+#         github-token: ${{ secrets.GITHUB_TOKEN }}
+#         path-to-lcov: ./target/client.lcov.info
+#         base-path: ./client/
+#         flag-name: unit-client
 
      - name: server - Generate Coverage report
-       run: ./bin-cache/bin/grcov .\server\ -s .\server\ --binary-path .\target\debug\ -t lcov --branch --ignore-not-existing -o ./target/server.lcov.info
-     - name: server - Coveralls
-       uses: coverallsapp/github-action@master
-       with:
-         github-token: ${{ secrets.GITHUB_TOKEN }}
-         path-to-lcov: ./target/server.lcov.info
-         base-path: ./server/
-         flag-name: unit-server
+       run: ./bin-cache/bin/grcov .\server\ -s .\server\ --binary-path .\target\debug\ -t html --branch --ignore-not-existing -o ./target/server.html
+#     - name: server - Coveralls
+#       uses: coverallsapp/github-action@master
+#       with:
+#         github-token: ${{ secrets.GITHUB_TOKEN }}
+#         path-to-lcov: ./target/server.lcov.info
+#         base-path: ./server/
+#         flag-name: unit-server
 
 #     - uses: codecov/codecov-action@v2
 #       with:
@@ -70,3 +78,35 @@ jobs:
 #         name: codecov-umbrella # optional
 #         fail_ci_if_error: true # optional (default = false)
 #         verbose: true # optional (default = false)
+
+     - name: Archive code coverage results
+       uses: actions/upload-artifact@v3
+       with:
+         name: code-coverage-report
+         retention-days: 5
+         path: |
+            ./target/server.html
+            ./target/client.html
+     - name: Add Comment on PR
+       uses: actions/github-script@v6
+       if: github.event_name == 'pull_request'
+       with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         script: |
+           const fs = require('fs');
+           const client_data = fs.readFileSync("./target/client.html/coverage.json", "utf-8");
+           const server_data = fs.readFileSync("./target/server.html/coverage.json", "utf-8");
+           const client_pct = JSON.parse(client_data).message;
+           const server_pct = JSON.parse(server_data).message;
+           if (parseFloat(server_pct.slice(0, -1)) < process.env.THRESHOLD) {
+              core.setFailed(`code coverage was ${server_pct} but threshold is set to ${process.env.THRESHOLD}`);
+           }
+           fs.writeFileSync("./target/cov.md", `server_pct: ${server_pct} and client_pct: ${client_pct}`);
+#           const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+#           github.rest.issues.createComment({ issue_number, owner, repo, body: `server_pct: ${server_pct} and client_pct: ${client_pct}` });
+     - name: Sticky
+       uses: marocchino/sticky-pull-request-comment@v2
+       with:
+         path: ./target/cov.md
+     - name: sum
+       run: echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
